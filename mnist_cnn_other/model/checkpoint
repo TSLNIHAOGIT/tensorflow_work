@@ -1,0 +1,6 @@
+model_checkpoint_path: "mnist_cnn_model.ckpt-4001"
+all_model_checkpoint_paths: "mnist_cnn_model.ckpt-1"
+all_model_checkpoint_paths: "mnist_cnn_model.ckpt-1001"
+all_model_checkpoint_paths: "mnist_cnn_model.ckpt-2001"
+all_model_checkpoint_paths: "mnist_cnn_model.ckpt-3001"
+all_model_checkpoint_paths: "mnist_cnn_model.ckpt-4001"
