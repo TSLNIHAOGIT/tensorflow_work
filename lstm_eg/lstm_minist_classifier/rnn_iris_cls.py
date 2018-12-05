@@ -4,6 +4,12 @@ import tensorflow as tf
 from sklearn.datasets import load_iris
 iris=load_iris()
 
+'''
+stm_cell 是定义的隐藏层的cell,
+ X_in是输入的训练数据（128batch,28steps,128hidden）其中time_major是说的时间点28steps是否位于X_in中第一个维度
+'''
+
+
 # train_path = 'C:/Users/user/Documents/irris_train.txt'
 # test_path = 'C:/Users/user/Documents/irris_test.txt'
 # logs_path = 'C:/Users/user/Desktop/log'
@@ -185,6 +191,10 @@ def main():
         # test
         incorrect = sess.run(error, {data: test_input, target: test_output, dropout: default_dropout})
         print('Epoch {:2d} error {:3.1f}%'.format(i + 1, 100 * incorrect))
+
+        '''
+        Epoch 500 error 33.3%
+        '''
 
 
 if __name__ == '__main__':

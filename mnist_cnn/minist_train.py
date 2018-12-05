@@ -3,7 +3,7 @@ import os
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 # 加载mnist_inference.py中定义的常量和前向传播的函数
-from tensorflow_work.mnist_cnn import minist_inference
+from mnist_cnn import minist_inference
 import numpy as np
 import ssl
 #全局取消证书验证

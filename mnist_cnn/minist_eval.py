@@ -1,8 +1,8 @@
 import time
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
-from tensorflow_work.mnist_cnn import minist_inference
-from tensorflow_work.mnist_cnn import minist_train
+from mnist_cnn import minist_inference
+from mnist_cnn import minist_train
 import numpy as np
 import ssl
 #全局取消证书验证

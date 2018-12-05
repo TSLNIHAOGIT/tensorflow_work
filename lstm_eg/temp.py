@@ -11,3 +11,6 @@ b=np.array([
 print(a.shape,len(a))
 print(b.shape,len(b))
 #len(张量)，第一纬的大小
+
+a=(1,2,3,4,5,6)
+print(type(a),a[-1])

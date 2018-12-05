@@ -1,2 +1,2 @@
-model_checkpoint_path: "average_model.ckpt"
-all_model_checkpoint_paths: "average_model.ckpt"
+model_checkpoint_path: "/Users/ozintel/Downloads/Tsl_python_progect/tensor_project/tensorflow_work/average_model.ckpt"
+all_model_checkpoint_paths: "/Users/ozintel/Downloads/Tsl_python_progect/tensor_project/tensorflow_work/average_model.ckpt"

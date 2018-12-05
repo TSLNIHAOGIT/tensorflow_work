@@ -34,7 +34,7 @@ def nn_classfier():
 
     #用随机数生成模拟数据集
     rdm=RandomState(1)
-    dataset_size=128
+    dataset_size=257
     X=rdm.rand(dataset_size,2)
     Y=[[int(x1+x2<1)] for  (x1,x2) in X]
 
@@ -52,7 +52,7 @@ def nn_classfier():
             start=(i*batch_size)%dataset_size
             end=min(start+batch_size,dataset_size)
 
-            # print('i',i,'start',start,'end',end)
+            print('i',i,'start',start,'end',end)
 
             #通过样本训练网络并更新参数
             sess.run(train_step,feed_dict={x:X[start:end],y_:Y[start:end]})#从start行标到end行标
@@ -278,6 +278,24 @@ def moving_average():
         print(sess.run([v1, ema.average(v1)]))
 
 if __name__=='__main__':
-    # nn_classfier()
+    nn_classfier()
     # nn_self_loss_classfier()
     moving_average()
+
+
+'''
+dataset_size=128
+i 1 start 8 end 16
+i 2 start 16 end 24
+i 3 start 24 end 32
+
+i 14 start 112 end 120
+i 15 start 120 end 128
+i 16 start 0 end 8
+i 17 start 8 end 16
+i 18 start 16 end 24
+
+
+
+
+'''

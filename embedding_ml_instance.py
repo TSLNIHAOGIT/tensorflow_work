@@ -180,7 +180,7 @@ with graph.as_default():
     optimizer = tf.train.GradientDescentOptimizer(1e-3).minimize(loss);
     #
     init = tf.initialize_all_variables()
-    num_steps = 10000;
+    # num_steps = 10000;
     with tf.Session(graph=graph) as session:
         init.run();
         print('inited')

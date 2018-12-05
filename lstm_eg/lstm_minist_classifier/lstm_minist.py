@@ -85,6 +85,7 @@ with tf.Session() as sess:
     step = 0
     while step * batch_size < training_iters:
         batch_xs, batch_ys = mnist.train.next_batch(batch_size)
+        print('batch_ys',batch_ys)
         batch_xs = batch_xs.reshape([batch_size, n_steps, n_inputs])
         sess.run([train_op], feed_dict={
         x: batch_xs,
@@ -96,3 +97,14 @@ with tf.Session() as sess:
             y: batch_ys,
             }))
         step += 1
+
+'''
+batch_ys 
+[[0. 0. 0. ... 0. 0. 1.]
+ [0. 0. 0. ... 0. 0. 1.]
+ [0. 0. 0. ... 1. 0. 0.]
+ ...
+ [0. 0. 1. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 1. 0.]
+ [0. 0. 0. ... 0. 0. 0.]]
+'''

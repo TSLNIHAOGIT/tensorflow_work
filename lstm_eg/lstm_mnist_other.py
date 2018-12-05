@@ -4,7 +4,11 @@ from tensorflow.contrib import rnn
 
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
+
 tf.set_random_seed(1) # set random seed
+
+
+print('tensorflow myversion',tf.__version__)#tensorflow myversion 1.10.1
 
 
 # configuration

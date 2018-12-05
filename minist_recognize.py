@@ -92,6 +92,7 @@ def train(mnist):
 
     # 计算使用了滑动平均之后的前向传播结果。第4章中介绍过滑动品均不会改变变量本身的取值，而是会维护一个影子变量来记录其滑动平均值。
     # 所以当需要使用这个滑动平均值时，需要明确调用 average 函数
+    ##验证时权重值都已经时训练好的直接拿过来用即可
     average_y    = inference(x, variable_averages, weights1, biases1, weights2, biases2)
 
     # 计算交叉熵作为刻画预测值和真实值之间差距的损失函数。这里使用了 Tensorflow 中提供的 sparse_softmax_cross_entropy_with_logits
@@ -166,7 +167,7 @@ def train(mnist):
                 gloabl_step 2109
                 gloabl_step 2110
                 gloabl_step 2111'''
-        # 在训练结束后，在测试数据集行检测神经网络模型的最终正确率
+        # 在训练结束后，在测试数据集行检测神经网络模型的最终正确率#结束后变量的值已经是训练好的值了，可以直接预测
         test_acc = sess.run(accuracy, feed_dict=test_feed)
         print("After %d training step(s), test accuracy using average model is %g" % (TRAINING_STEPS, test_acc))
 
