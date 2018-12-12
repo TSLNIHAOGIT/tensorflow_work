@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 import ssl
 import numpy as np
+
 '''
 （1）padding:dynamic处理变长序列时，取最大长度序列，不足的序列补0；
  (2) mask:设置sequence_length，这样输出时补零的time_step部分输出也为0
@@ -102,7 +103,7 @@ def length(sequence):
       length = tf.cast(length, tf.int32)
       return length
 
-#训练完成后预测时会用到
+#计算预测值时会用到，
 def last_relevant(output, length):
       batch_size = tf.shape(output)[0]
       max_length = tf.shape(output)[1]
@@ -111,6 +112,19 @@ def last_relevant(output, length):
       flat = tf.reshape(output, [-1, out_size])
       relevant = tf.gather(flat, index)
       return relevant
+
+
+#用于分类时是不是用mask结果都是一样的
+def cost(target,prediction):
+    # Compute cross entropy for each frame.
+    cross_entropy = target * tf.log(prediction)
+    cross_entropy = -tf.reduce_sum(cross_entropy, reduction_indices=2)
+    mask = tf.sign(tf.reduce_max(tf.abs(target), reduction_indices=2))
+    cross_entropy *= mask
+    # Average over actual sequence lengths.
+    cross_entropy = tf.reduce_sum(cross_entropy, reduction_indices=1)
+    cross_entropy /= tf.cast(length, tf.float32)
+    return tf.reduce_mean(cross_entropy)
 
 
 
@@ -127,11 +141,11 @@ def RNN(X, weights, biases):
     # # X_in ==> (128 batches, 28 steps, 128 hidden) 换回3维
     # X_in = tf.reshape(X_in, [-1, n_steps, n_hidden_units])
 
-    # cell
-    ####################################################################################
-    lstm_cell = tf.contrib.rnn.BasicLSTMCell(n_hidden_units, forget_bias=1.0, state_is_tuple=True)
-    init_state = lstm_cell.zero_state(batch_size, dtype=tf.float32)  # 初始化全零 state
-    outputs, final_state = tf.nn.dynamic_rnn(lstm_cell, X, initial_state=init_state, time_major=False)
+    # # cell
+    # ####################################################################################
+    # lstm_cell = tf.contrib.rnn.BasicLSTMCell(n_hidden_units, forget_bias=1.0, state_is_tuple=True)
+    # init_state = lstm_cell.zero_state(batch_size, dtype=tf.float32)  # 初始化全零 state
+    # outputs, final_state = tf.nn.dynamic_rnn(lstm_cell, X,sequence_length=length(X), initial_state=init_state, time_major=False)
 
     # MultiRNNCel
     ####################################################################################
@@ -154,7 +168,7 @@ def RNN(X, weights, biases):
     # ** state.shape = [layer_num, 2, batch_size, hidden_size],
     # ** 或者，可以取 h_state = state[-1][1] 作为最后输出
     # ** 最后输出维度是 [batch_size, hidden_size]
-    outputs, final_state_ = tf.nn.dynamic_rnn(mlstm_cell, inputs=X, initial_state=init_state, time_major=False)
+    outputs, final_state_ = tf.nn.dynamic_rnn(mlstm_cell, inputs=X, sequence_length=length(X),initial_state=init_state, time_major=False)
     #final_state估计是（layer_num,(cell_state,hidden_state)）
 
     #针对有padding时的state

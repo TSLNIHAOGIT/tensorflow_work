@@ -72,20 +72,21 @@ def RNN(X, weights, biases):
     # **步骤4：调用 MultiRNNCell 来实现多层 LSTM
     mlstm_cell = tf.contrib.rnn.MultiRNNCell([lstm_cell] * layer_num, state_is_tuple=True)
 
-    # **步骤5：用全零来初始化state
+    # **步骤5：用全零来初始化state，初始化时,多层都要进行初始化
     init_state = mlstm_cell.zero_state(batch_size, dtype=tf.float32)
+    # mlstm_cell，initial_state这两者要对应，num_hidden与initial_state中的c或者h的第二维度相同
     print('init_state',init_state)
     '''
     lstmcell:
     init_state (
-    LSTMStateTuple(c=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState/BasicLSTMCellZeroState/zeros:0' shape=(128, num_hidden=128) dtype=float32>, h=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState/BasicLSTMCellZeroState/zeros_1:0' shape=(128, 128) dtype=float32>), 
+    LSTMStateTuple(c=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState/BasicLSTMCellZeroState/zeros:0' shape=(batch=128, num_hidden=128) dtype=float32>, h=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState/BasicLSTMCellZeroState/zeros_1:0' shape=(batch=128, num_hidden=128) dtype=float32>), 
     LSTMStateTuple(c=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState_1/BasicLSTMCellZeroState/zeros:0' shape=(128, 128) dtype=float32>, h=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState_1/BasicLSTMCellZeroState/zeros_1:0' shape=(128, 128) dtype=float32>), 
     LSTMStateTuple(c=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState_2/BasicLSTMCellZeroState/zeros:0' shape=(128, 128) dtype=float32>, h=<tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState_2/BasicLSTMCellZeroState/zeros_1:0' shape=(128, 128) dtype=float32>))
 
 
     GRUcell:
     init_state (
-    <tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState/GRUCellZeroState/zeros:0' shape=(128, 12) dtype=float32>,
+    <tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState/GRUCellZeroState/zeros:0' shape=(batch=128, num_hidden=12) dtype=float32>,
      <tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState_1/GRUCellZeroState/zeros:0' shape=(128, 12) dtype=float32>, 
      <tf.Tensor 'MultiRNNCellZeroState/DropoutWrapperZeroState_2/GRUCellZeroState/zeros:0' shape=(128, 12) dtype=float32>)
     '''
@@ -97,7 +98,7 @@ def RNN(X, weights, biases):
     # ** 或者，可以取 h_state = state[-1][1] 作为最后输出
     # ** 最后输出维度是 [batch_size, hidden_size]
     outputs, final_state0 = tf.nn.dynamic_rnn(mlstm_cell, inputs=X_in, initial_state=init_state, time_major=False)
-    #mlstm_cell，initial_state=init_state这两者要对应，num_hidden与initial_state第二维度相同
+
     print('outputs',outputs)#outputs Tensor("rnn/transpose_1:0", shape=(128, 28, 128), dtype=float32)
 
 
@@ -117,7 +118,8 @@ def RNN(X, weights, biases):
 
     '''
 
-    #这两个h_state都是最后一层的，最后时刻的state
+    #只用了最后一层最后时刻的输出结果
+    #这两个h_state都是最后一层的，（最后时刻的）state的h值
     # final_state = outputs[:, -1, :]  # 或者
     final_state = final_state0[-1][1]#取最后一层的LSTMStateTuple中的h,lstm时正确的，gru时状态都不一样，不能这样写
 

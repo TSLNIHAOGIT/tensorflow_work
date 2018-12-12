@@ -11,7 +11,7 @@ training_iters = 100000 # train step 上限
 batch_size = 128
 n_inputs = 28 # MNIST data input (img shape: 28*28)
 n_steps = 28 # time steps
-n_hidden_units = 128 # neurons in hidden layer
+n_hidden_units = 12 # neurons in hidden layer
 n_classes = 10 # MNIST classes (0-9 digits)
 
 # x y placeholder
@@ -45,6 +45,15 @@ def RNN(X, weights, biases):
     # 使用 basic LSTM Cell.
     lstm_cell = tf.contrib.rnn.BasicLSTMCell(n_hidden_units, forget_bias=1.0, state_is_tuple=True)
     init_state = lstm_cell.zero_state(batch_size, dtype=tf.float32) # 初始化全零 state
+    print('lstm_cell init_state',init_state)
+    '''
+    lstm_cell init_state 
+    LSTMStateTuple(
+    c=<tf.Tensor 'BasicLSTMCellZeroState/zeros:0' shape=(batch=128, n_hidden_units=128) dtype=float32>, 
+    h=<tf.Tensor 'BasicLSTMCellZeroState/zeros_1:0' shape=(batch=128, n_hidden_units=128) dtype=float32>)
+
+    '''
+
     outputs, final_state = tf.nn.dynamic_rnn(lstm_cell, X_in, initial_state=init_state, time_major=False)
 
     # 使用 MultiRNNCell.
